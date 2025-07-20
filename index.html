@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Descobrir a Bandeira</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-image: url('/bandeiras.png');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            backdrop-filter: blur(4px);
+            background-color: #00000088;
+        }
+
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #00000099;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .info h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .info p, .info ul {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .info ul {
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .player-info {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .player-info label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .player-info input {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 70%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        .dificuldades {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .dificuldades a {
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            background-color: #1e88e5;
+            color: white;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .dificuldades a:hover {
+            background-color: #1565c0;
+            transform: scale(1.05);
+        }
+
+        p:last-of-type {
+            margin-top: 30px;
+            color: #dddddd;
+            font-size: 0.95em;
+            text-shadow: 1px 1px 2px #000000;
+        }
+
+        @media (max-width: 600px) {
+            .info {
+                padding: 20px;
+            }
+
+            .dificuldades a {
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Descubra a Bandeira!</h1>
+    <div class="info">
+        <h2>Sobre o Jogo</h2>
+        <p>O objetivo do jogo é adivinhar o país correspondente à bandeira exibida. Você pode escolher entre três modos de dificuldade:</p>
+        <ul>
+            <li><strong>Fácil:</strong> O nome da bandeira é exibido e você pode errar quantas vezes quiser.</li>
+            <li><strong>Médio:</strong> O nome da bandeira não é exibido, mas você ainda pode errar quantas vezes quiser.</li>
+            <li><strong>Difícil:</strong> O nome da bandeira não é exibido e você tem apenas 3 tentativas para acertar.</li>
+        </ul>
+        <div class="player-info">
+            <label for="player-name">Digite seu nome:</label><br>
+            <input type="text" id="player-name" placeholder="Seu nome aqui">
+        </div>
+        <p>Escolha a dificuldade abaixo para começar a jogar!</p>
+    </div>
+    <div class="dificuldades">
+        <a href="#" onclick="handleStartGame('facil')">Fácil</a>
+        <a href="#" onclick="handleStartGame('medio')">Médio</a>
+        <a href="#" onclick="handleStartGame('dificil')">Difícil</a>
+    </div>
+    <p>Dica: Pressione a barra de espaço para ativar a lupa.</p>
+    
+    <script>
+        function handleStartGame(modo) {
+            const playerName = document.getElementById('player-name').value.trim();
+            if (!playerName) {
+                alert("Por favor, digite seu nome!");
+                return;
+            }
+            localStorage.setItem('playerName', playerName);
+            window.location.href = `game.html?modo=${modo}`;
+        }
+    </script>
+    <script src="tab.js"></script>
+</body>
+</html>

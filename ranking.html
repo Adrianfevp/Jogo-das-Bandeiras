@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking de Jogadores</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #d4d7db;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ranking de Jogadores</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Posição</th>
+                <th>Nome</th>
+                <th>Modo</th>
+                <th>Países Acertados</th>
+                <th>Tempo</th>
+                <th>Tentativas</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="ranking-table-body">
+        </tbody>
+    </table>
+    <p class="no-results" id="no-results-message" style="display: none;">Nenhum resultado encontrado.</p>
+    <script src="tab.js"></script>
+    <script>
+        function loadRanking() {
+            const scores = JSON.parse(localStorage.getItem('flagGameScores')) || [];
+            const tableBody = document.getElementById('ranking-table-body');
+            const noResultsMessage = document.getElementById('no-results-message');
+
+            tableBody.innerHTML = '';
+
+            if (scores.length === 0) {
+                noResultsMessage.style.display = 'block';
+                return;
+            } else {
+                noResultsMessage.style.display = 'none';
+            }
+
+            scores.sort((a, b) => {
+                if (b.correctGuesses !== a.correctGuesses) {
+                    return b.correctGuesses - a.correctGuesses;
+                } else {
+                    return a.time - b.time;
+                }
+            });
+
+            scores.forEach((score, index) => {
+                const minutes = Math.floor(score.time / 60);
+                const seconds = score.time % 60;
+                const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${score.name}</td>
+                    <td>${getDifficultyName(score.difficulty)}</td>
+                    <td>${score.correctGuesses}</td>
+                    <td>${formattedTime}</td>
+                    <td>${score.attempts}</td>
+                    <td>${score.date}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function getDifficultyName(difficulty) {
+            switch(difficulty) {
+                case 'facil': return 'Fácil';
+                case 'medio': return 'Médio';
+                case 'dificil': return 'Difícil';
+                default: return '';
+            }
+        }
+
+        window.onload = loadRanking;
+    </script>
+</body>
+</html>
